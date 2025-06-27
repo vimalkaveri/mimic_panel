@@ -1,23 +1,111 @@
-.app {
+/* ========= GLOBAL RESET ========= */
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
   font-family: Arial, sans-serif;
-  padding: 20px;
+  background-color: #f4f6f9;
 }
 
-h1 {
+#root {
+  height: 100%;
+}
+
+/* ========= APP LAYOUT ========= */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+main {
+  margin-top: 80px;     /* height of header */
+  margin-bottom: 40px;  /* height of footer */
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+/* ========= HEADER ========= */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #1e1e2f;
+  color: white;
+  z-index: 1000;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+/* SVG Upload Button */
+.svg-upload {
+  position: relative;
+}
+
+.svg-upload label {
+  background-color: #444;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s ease;
+}
+
+.svg-upload label:hover {
+  background-color: #666;
+}
+
+.svg-upload input[type="file"] {
+  display: none;
+}
+
+/* ========= FOOTER ========= */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #1e1e2f;
+  color: #ccc;
+  z-index: 1000;
   text-align: center;
+  padding: 0.5rem 0;
+  font-size: 0.75rem;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* ========= DASHBOARD ========= */
 .dashboard {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* ========= SVG PANEL ========= */
 .svg-container {
   position: relative;
-  border: 1px solid #ccc;
   display: inline-block;
-  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  margin: 1rem 0;
+  background: white;
+  padding: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .panel-svg {
@@ -32,22 +120,24 @@ h1 {
   cursor: pointer;
 }
 
+/* ========= FORMS ========= */
 .marker-form,
 .sensor-input-form {
-  margin: 10px 0;
-  padding: 10px;
-  width: 360px;
+  background: #f8f8f8;
   border: 1px solid #ccc;
   border-radius: 6px;
-  background-color: #f8f8f8;
+  padding: 1rem;
+  width: 360px;
+  margin: 1rem 0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
 }
 
 .marker-form input,
 .marker-form select,
 .sensor-input-form textarea {
   width: 100%;
-  margin-top: 4px;
-  margin-bottom: 8px;
   padding: 6px;
-  box-sizing: border-box;
+  margin: 6px 0;
+  border-radius: 4px;
+  border: 1px solid #ccc;
 }

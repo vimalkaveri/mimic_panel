@@ -43,7 +43,8 @@ function SensorInput({ onSensorData }) {
 
   const handleManualFetch = async () => {
     try {
-      const res = await fetch('http://192.168.1.77:5000/messages');
+      //const res = await fetch('http://192.168.1.77:5000/messages');
+      const res = await fetch('http://192.168.72.145:5000/messages');
       const data = await res.json();
 
       if (!Array.isArray(data) || data.length === 0) {

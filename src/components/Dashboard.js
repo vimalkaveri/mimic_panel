@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import MarkerForm from './MarkerForm';
 import SensorInput from './SensorInput';
-import './Dashboard.css'; // Make sure this file exists
+import './Dashboard.css';
 
-function Dashboard() {
+function Dashboard({ svgContent }) {
   const [markers, setMarkers] = useState([]);
   const [selectedPosition, setSelectedPosition] = useState(null);
-  const [svgContent, setSvgContent] = useState(null);
 
+  // Handle click on SVG to place a marker
   const handleSvgClick = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -15,35 +15,26 @@ function Dashboard() {
     setSelectedPosition({ x, y });
   };
 
+  // Add new marker
   const addMarker = (marker) => {
-    setMarkers([...markers, marker]);
+    setMarkers((prev) => [...prev, marker]);
     setSelectedPosition(null);
   };
 
-  const updateSensorStatuses = (sensorArray) => {
-    setMarkers((prevMarkers) =>
-      prevMarkers.map((marker) => {
-        const index = parseInt(marker.sensor, 10);
-        const state = sensorArray[index];
-        const newStatus = state === 1 ? 'fire' : 'normal';
-        return { ...marker, status: newStatus };
-      })
-    );
-  };
+  // Update marker status using sensor data
+const updateSensorStatuses = (sensorArray) => {
+  setMarkers((prevMarkers) =>
+    prevMarkers.map((marker) => {
+      const index = parseInt(marker.sensor, 10);
+      const state = sensorArray[index];
+      const newStatus = state === 1 ? 'fire' : 'normal';
+      return { ...marker, status: newStatus };
+    })
+  );
+};
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file || !file.type.includes('svg')) {
-      alert('Please upload a valid SVG file.');
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setSvgContent(event.target.result);
-    };
-    reader.readAsText(file);
-  };
 
+  // Update fill color of SVG zones
   useEffect(() => {
     markers.forEach((marker) => {
       const zoneEl = document.getElementById(`zone-${marker.sensor}`);
@@ -55,29 +46,31 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
-      <h3>Upload SVG Panel</h3>
-      <input type="file" accept=".svg" onChange={handleFileUpload} />
-
-      {svgContent && (
+      {svgContent ? (
         <div className="svg-container" onClick={handleSvgClick}>
           <div
             className="inline-svg"
             dangerouslySetInnerHTML={{ __html: svgContent }}
           />
-          {markers.map((m, i) => (
+          {markers.map((marker, index) => (
             <div
-              key={i}
-              className={`marker ${m.status}`}
-              style={{ left: m.x, top: m.y }}
-              title={`Sensor Index: ${m.sensor}, Floor: ${m.floor}, Room: ${m.room}, Status: ${m.status}`}
+              key={index}
+              className={`marker ${marker.status}`}
+              style={{ left: marker.x, top: marker.y }}
+              title={`Sensor: ${marker.sensor}, Floor: ${marker.floor}, Room: ${marker.room}, Status: ${marker.status}`}
             ></div>
           ))}
         </div>
+      ) : (
+        <p style={{ marginTop: '2rem' }}>
+          🛈 Please upload an SVG file from the top-right corner.
+        </p>
       )}
 
       {selectedPosition && (
         <MarkerForm position={selectedPosition} onSubmit={addMarker} />
       )}
+
       <SensorInput onSensorData={updateSensorStatuses} />
     </div>
   );
